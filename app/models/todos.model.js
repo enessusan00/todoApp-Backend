@@ -6,8 +6,12 @@ module.exports = (sequelize, Sequelize) => {
     description: {
       type: Sequelize.STRING
     },
+    active: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: true
+    }, 
     status: {
-      type: Sequelize.ENUM('pending', 'in progress', 'done')
+      type: Sequelize.ENUM('on going', 'in progress', 'done')
     },
   },
   {

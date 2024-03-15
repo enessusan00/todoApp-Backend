@@ -150,3 +150,19 @@ exports.findAllDone= (req, res) => {
       });
     });
 };
+
+exports.deleteAllDisables = (req, res) => {
+  Todo.destroy({
+    where: { active: false },
+    truncate: false
+  })
+    .then(nums => {
+      res.send({ message: `${nums} Todo were deleted successfully!` });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while removing all Todo."
+      });
+    });
+}

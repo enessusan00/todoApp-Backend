@@ -17,12 +17,16 @@ module.exports = app => {
 
   // Update a Tutorial with id
   router.put("/:id", todos.update);
+  
+    // Delete all Tutorials with status done
+    router.delete("/disables", todos.deleteAllDisables);
 
   // Delete a Tutorial with id
   router.delete("/:id", todos.delete);
-
+  
   // Delete all Tutorials
   router.delete("/", todos.deleteAll);
 
   app.use('/api/todos', router);
+
 };
