@@ -1,6 +1,67 @@
 const db = require("../models");
 const Todo = require('../models/todos.model')(db.sequelize, db.Sequelize);
+const multer = require('multer');
 const Op = db.Sequelize.Op;
+const Image = db.images; // Image modelini kullanıma al
+
+
+exports.getImages = (req, res) => {
+  const todoId = req.params.id;
+
+  // Image modelini kullanarak, belirli bir Todo'ya ait görselleri sorgulayın
+  Image.findAll({
+    where: {
+      todoId: todoId
+    }
+  })
+  .then(images => {
+    // Görselleri JSON formatında döndür
+    res.send(images);
+  })
+  .catch(err => {
+    res.status(500).send({
+      message: "Some error occurred while retrieving images."
+    });
+  });
+};
+
+
+
+exports.uploadImages = (req, res) => {
+  const todoId = req.params.id; // URL parametresinden Todo ID'sini al
+
+  // Eğer dosya yüklendiyse
+  if (req.files && req.files.length > 0) {
+    // Yüklenen her dosya için bir döngü başlat
+    req.files.forEach(file => {
+      // Her dosya için Image modelini kullanarak bir kayıt oluştur
+      console.log("file", file);
+      console.log("file.path", file.path);
+      console.log("todoId", todoId);
+      Image.create({
+        todoId: todoId, // İlişkili Todo'nun ID'si
+        imagePath: file.path // Yüklenen dosyanın kaydedildiği yol
+      })
+      .then(image => {
+        console.log("Image saved successfully:", image);
+      })
+      .catch(err => {
+        console.error("Error saving image:", err);
+        // Kayıt sırasında bir hata oluşursa, 500 hatası dön
+        res.status(500).send({
+          message: "An error occurred while saving the image."
+        });
+        return;
+      });
+    });
+
+    // Tüm görseller başarıyla kaydedildiyse, bir yanıt gönder
+    res.send({ message: "Images uploaded successfully!" });
+  } else {
+    // Eğer dosya yüklenmediyse, bir hata mesajı gönder
+    res.status(400).send({ message: "Please upload images." });
+  }
+};
 
 // Create and Save a new Todo
 exports.create = (req, res) => {

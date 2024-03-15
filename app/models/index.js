@@ -18,6 +18,12 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.tutorials = require("./todos.model.js")(sequelize, Sequelize);
-
+db.todos = require("./todos.model.js")(sequelize, Sequelize);
+db.images = require("./images.model.js")(sequelize, Sequelize);
+// Todo ve Image arasında ilişki
+db.todos.hasMany(db.images, { as: "images" });
+db.images.belongsTo(db.todos, {
+  foreignKey: "todoId",
+  as: "todo",
+});
 module.exports = db;
