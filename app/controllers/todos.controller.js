@@ -113,7 +113,8 @@ exports.create = (req, res) => {
   const todo = {
     title: req.body.title,
     description: req.body.description,
-    status: req.body.status
+    status: req.body.status,
+    userId : req.body.userId
   };
 
   // Save Todo in the database
@@ -166,6 +167,22 @@ exports.findOne = (req, res) => {
       });
     });
 };
+
+exports.getUserTodos = (req, res) => {
+  const userId = req.params.userId;
+
+  Todo.findAll({ where: { userId: userId }})
+    .then(data => {
+      res.send(data);
+      console.log("data", data);
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving Todo."
+      });
+    });
+}
 
 // Update a Todo by the id in the request
 exports.update = (req, res) => {

@@ -19,7 +19,9 @@ module.exports = (sequelize, Sequelize) => {
       references: {
         model: 'users', // 'users' tablosuna referans
         key: 'id',
-      }
+      },
+      allowNull: false,
+      defaultValue: 0 // Set a default value for userId
     }
   },
   {

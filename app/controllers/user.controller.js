@@ -22,7 +22,7 @@ const signup = async (req, res) => {
             expiresIn: 86400, // 24 saat
         });
 
-        res.status(200).send({ auth: true, token: token, userid: user.id, role: user.role});
+        res.status(200).send({ auth: true, token: token, id: user.id, role: user.role});
     } catch (error) { 
         res.status(500).send({error: error.message});
     }
@@ -48,7 +48,7 @@ const signin = async (req, res) => {
     expiresIn: 86400, // 24 saat
   });
 
-  res.status(200).send({ auth: true, token: token, role: user.role });
+  res.status(200).send({ id: user.id,auth: true, token: token, role: user.role });
 };
 
 const logout = (req, res) => {

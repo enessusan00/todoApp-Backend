@@ -1,4 +1,5 @@
 module.exports = (app) => {
+  const express = require('express');
   const todos = require("../controllers/todos.controller.js");
   var router = require("express").Router();
   const fs = require('fs');
@@ -30,13 +31,14 @@ module.exports = (app) => {
   router.post("/",verifyToken, todos.create);
 
   // Retrieve all Tutorials
-  router.get("/",verifyToken, todos.findAll);
+  router.get("/:userId/user",verifyToken, todos.getUserTodos);
 
   // Retrieve all published Tutorials
   router.get("/done",verifyToken, todos.findAllDone);
 
   // Retrieve a single Tutorial with id
   router.get("/:id", verifyToken,todos.findOne);
+
 
   // Update a Tutorial with id
   router.put("/:id",verifyToken, todos.update);
@@ -50,5 +52,7 @@ module.exports = (app) => {
   // Delete all Tutorials
   router.delete("/",verifyToken, todos.deleteAll);
 
-  app.use("/api/todos",verifyToken, router);
+  app.use("/uploads", express.static("uploads"));
+
+  app.use("/api/todos", router);
 };

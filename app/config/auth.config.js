@@ -1,7 +1,11 @@
-// config/auth.config.js
 const crypto = require('crypto');
-const secret = crypto.randomBytes(64).toString('hex');
+
+// config/auth.config.js
+
+function generateSecret() {
+    return crypto.randomBytes(64).toString('hex');
+}
 
 module.exports = {
-  secret
+    secret: generateSecret()
 };
