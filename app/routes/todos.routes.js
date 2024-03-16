@@ -2,7 +2,7 @@ module.exports = (app) => {
   const todos = require("../controllers/todos.controller.js");
   var router = require("express").Router();
   const fs = require('fs');
-
+  const {verifyToken} =  require("../controllers/user.controller");
   const uploadDir = './uploads';
   
   if (!fs.existsSync(uploadDir)){
@@ -21,34 +21,34 @@ module.exports = (app) => {
 
   const upload = multer({ storage: storage });
 
-  router.delete("/deleteImage/:id", todos.deleteImage);
+  router.delete("/deleteImage/:id",verifyToken, todos.deleteImage);
 
-  router.get("/:id/images", todos.getImages);
+  router.get("/:id/images", verifyToken,todos.getImages);
 
-  router.post("/:id/upload", upload.array("images"), todos.uploadImages);
+  router.post("/:id/upload",verifyToken, upload.array("images"), todos.uploadImages);
   // Create a new Tutorial
-  router.post("/", todos.create);
+  router.post("/",verifyToken, todos.create);
 
   // Retrieve all Tutorials
-  router.get("/", todos.findAll);
+  router.get("/",verifyToken, todos.findAll);
 
   // Retrieve all published Tutorials
-  router.get("/done", todos.findAllDone);
+  router.get("/done",verifyToken, todos.findAllDone);
 
   // Retrieve a single Tutorial with id
-  router.get("/:id", todos.findOne);
+  router.get("/:id", verifyToken,todos.findOne);
 
   // Update a Tutorial with id
-  router.put("/:id", todos.update);
+  router.put("/:id",verifyToken, todos.update);
 
   // Delete all Tutorials with status done
-  router.delete("/disables", todos.deleteAllDisables);
+  router.delete("/disables",verifyToken, todos.deleteAllDisables);
 
   // Delete a Tutorial with id
-  router.delete("/:id", todos.delete);
+  router.delete("/:id",verifyToken,todos.delete);
 
   // Delete all Tutorials
-  router.delete("/", todos.deleteAll);
+  router.delete("/",verifyToken, todos.deleteAll);
 
-  app.use("/api/todos", router);
+  app.use("/api/todos",verifyToken, router);
 };

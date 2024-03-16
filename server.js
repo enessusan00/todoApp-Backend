@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-const path = require('path');
 const app = express();
 
 var corsOptions = {
@@ -14,10 +13,13 @@ app.use(express.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-const db = require("./app/models");
 
-db.sequelize.sync()
+require("./app/routes/todos.routes")(app);
+require('./app/routes/auth.routes')(app);
+
+
+const db = require("./app/models");
+db.sequelize.sync( { force: true })
     .then(() => {
         console.log("Synced db.");
     })
@@ -25,17 +27,10 @@ db.sequelize.sync()
         console.log("Failed to sync db: " + err);
     });
 
-// // drop the table if it already exists
-// db.sequelize.sync({ force: true }).then(() => {
-//   console.log("Drop and re-sync db.");
-// });
-
 // simple route
 app.get("/", (req, res) => {
     res.json({ message: "Welcome to enessusan00 application." });
 });
-
-require("./app/routes/todos.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
