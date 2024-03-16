@@ -5,6 +5,42 @@ const Op = db.Sequelize.Op;
 const Image = db.images; // Image modelini kullanıma al
 
 
+exports.deleteImage = (req, res) => {
+  const id = req.params.id;
+
+  Image.findByPk(id)
+    .then(image => {
+      if (image) {
+        // Dosya sisteminden görseli sil
+        const fs = require('fs');
+        fs.unlink(image.imagePath, (err) => {
+          if (err) {
+            console.error("Error deleting image:", err);
+          }
+        });
+
+        // Veritabanından görseli sil
+        image.destroy();
+        res.send({
+          message: "Image was deleted successfully."
+        });
+      }
+      else {
+        res.status(404).send({
+          message: `Cannot find image with id=${id}.`
+        });
+      }
+    }
+    )
+    .catch(err => {
+      res.status(500).send({
+        message: "Error retrieving image with id=" + id
+      });
+    });
+};
+
+
+
 exports.getImages = (req, res) => {
   const todoId = req.params.id;
 
