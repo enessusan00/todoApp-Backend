@@ -21,6 +21,8 @@ module.exports = (app) => {
 
   const upload = multer({ storage: storage });
 
+  router.delete("/deleteImage/:id", todos.deleteImage);
+
   router.get("/:id/images", todos.getImages);
 
   router.post("/:id/upload", upload.array("images"), todos.uploadImages);
