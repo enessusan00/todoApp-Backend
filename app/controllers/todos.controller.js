@@ -1,5 +1,6 @@
 const db = require("../models");
 const Todo = require('../models/todos.model')(db.sequelize, db.Sequelize);
+const User = require('../models/user.model')(db.sequelize, db.Sequelize);
 const multer = require('multer');
 const Op = db.Sequelize.Op;
 const Image = db.images; // Image modelini kullanıma al
@@ -174,7 +175,6 @@ exports.getUserTodos = (req, res) => {
   Todo.findAll({ where: { userId: userId }})
     .then(data => {
       res.send(data);
-      console.log("data", data);
     })
     .catch(err => {
       res.status(500).send({
@@ -280,3 +280,34 @@ exports.deleteAllDisables = (req, res) => {
       });
     });
 }
+
+exports.getAllUserTodos = (req, res) => {
+  console.log("getAllUserTodos");
+  Todo.findAll()
+    .then(data => {
+      User.findAll().then(users => {
+        const result = users.map(user => {
+          const todos = data.filter(todo => todo.userId === user.id);
+          return {
+        userInfo: {
+        user
+        },
+        todos: todos.map(todo => ({
+          id: todo.id,
+          title: todo.title,
+          description: todo.description,
+          status: todo.status,
+          active: todo.active
+        }))
+          };
+        });
+        res.send(result);
+      });
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred while retrieving user todos."
+      });
+    });
+  }

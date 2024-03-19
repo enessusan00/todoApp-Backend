@@ -40,7 +40,7 @@ const signin = async (req, res) => {
   const passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
 
   if (!passwordIsValid) {
-    return res.status(401).send({ auth: false, token: null });
+    return res.status(401).send("Wrong password");
   }
 
   // JWT oluştur
@@ -48,7 +48,7 @@ const signin = async (req, res) => {
     expiresIn: 86400, // 24 saat
   });
 
-  res.status(200).send({ id: user.id,auth: true, token: token, role: user.role });
+  res.status(200).send({ id: user.id, username: user.username,auth: true, token: token, role: user.role });
 };
 
 const logout = (req, res) => {

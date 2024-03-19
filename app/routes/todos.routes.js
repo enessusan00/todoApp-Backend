@@ -30,6 +30,8 @@ module.exports = (app) => {
   // Create a new Tutorial
   router.post("/",verifyToken, todos.create);
 
+  router.get("/all",verifyToken, todos.getAllUserTodos);
+
   // Retrieve all Tutorials
   router.get("/:userId/user",verifyToken, todos.getUserTodos);
 
