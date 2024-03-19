@@ -12,4 +12,4 @@ The app contains 3 model:
 User associate with Todos.
 Todo associate with Images.
 
-*[multer](https://www.npmjs.com/package/multer)https://www.npmjs.com/package/multer* package used for uploading files.
+[*multer*](https://www.npmjs.com/package/multer) package used for uploading files.
