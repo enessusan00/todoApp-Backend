@@ -72,9 +72,6 @@ exports.uploadImages = (req, res) => {
     // Yüklenen her dosya için bir döngü başlat
     req.files.forEach(file => {
       // Her dosya için Image modelini kullanarak bir kayıt oluştur
-      console.log("file", file);
-      console.log("file.path", file.path);
-      console.log("todoId", todoId);
       Image.create({
         todoId: todoId, // İlişkili Todo'nun ID'si
         imagePath: file.path // Yüklenen dosyanın kaydedildiği yol
@@ -282,7 +279,6 @@ exports.deleteAllDisables = (req, res) => {
 }
 
 exports.getAllUserTodos = (req, res) => {
-  console.log("getAllUserTodos");
   Todo.findAll()
     .then(data => {
       User.findAll().then(users => {
